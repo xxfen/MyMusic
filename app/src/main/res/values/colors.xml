@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="color_blue">#2af</color>
+    <color name="color_white">#fff</color>
+    <color name="color_title">#279ef9</color>
+    <!--activity背景色-->
+    <color name="color_activity">#E8E8E8</color>
+    <!--字体颜色-->
+    <color name="color_text1">#1e92d2</color>
+    <color name="color_text2">#686868</color>
+    <color name="color_text3">#ed5925</color>
+    <color name="color_text4">#fea633</color>
+    <color name="color_text5">#a9aaab</color>
+    <color name="color_text6">#279ef9</color>
+    <color name="color_text7">#3a3a3a</color>
+    <!--控件颜色-->
+    <color name="color_view1">#b2e0fa</color>
+    <color name="color_view1_1">#73b2e0fa</color>
+    <color name="color_view2">#ddd</color>
+    <color name="color_view3">#f8f8f8</color>
+    <color name="color_view4">#DAD5D5</color>
+    <color name="color_view5">#70111111</color>
+    <color name="color_green">#7CDC38</color>
+
+    <!--分割线颜色-->
+    <color name="color_line1">#bcbcbc</color>
+    <color name="color_line2">#616263</color>
+    <color name="color_line3">#EFEFEF</color>
+</resources>

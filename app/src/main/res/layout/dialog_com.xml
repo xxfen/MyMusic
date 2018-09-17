@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/line_dialog_listcontent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_dialogcom_title"
+        android:layout_width="match_parent"
+        android:layout_height="130px"
+        android:gravity="center"
+        android:text="提示"
+        android:textColor="@color/black"
+        android:textSize="40px" />
+
+    <View style="@style/style_line_horizontal" />
+
+    <ListView
+        android:id="@+id/list_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@color/color_line1"
+        android:dividerHeight="0.5px" />
+
+    <TextView
+        android:id="@+id/tv_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="50px"
+        android:visibility="gone"
+
+        tools:text="你好" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.5px"
+        android:background="@color/color_line1" />
+
+    <TextView
+        android:id="@+id/tv_dialogcom_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="130px"
+        android:onClick="click"
+        android:background="@drawable/selector_able_gray"
+        android:gravity="center"
+        android:text="取消"
+        android:textColor="@color/color_text3" />
+</com.zhy.autolayout.AutoLinearLayout>
+
+    <!--<com.zhy.autolayout.AutoLinearLayout
+        android:id="@+id/line_dialog_acontent"
+        android:layout_width="680px"
+        android:layout_height="290px"
+
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_dialogcont_content"
+            android:layout_width="match_parent"
+            android:layout_height="145px"
+            android:gravity="center"
+            android:text="这里是内容"
+            android:textColor="#1f1f1f"
+            android:textSize="44px" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.5px"
+            android:background="@color/color_view1" />
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="145px"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_dialogcont_cancel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="@color/color_blue"
+                android:textSize="44px" />
+
+            <View
+                android:layout_width="1.5px"
+                android:layout_height="match_parent"
+                android:background="@color/color_view1" />
+
+            <TextView
+                android:id="@+id/tv_dialogcont_determine"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="确定"
+                android:textColor="@color/color_blue"
+                android:textSize="44px" />
+        </com.zhy.autolayout.AutoLinearLayout>
+
+    </com.zhy.autolayout.AutoLinearLayout>-->
+
+    <!--<ImageView
+        android:id="@+id/img_dialogcom_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="120dp"
+        android:layout_marginRight="120dp"
+        android:layout_marginTop="30dp"
+        android:src="@mipmap/dao_right" />-->
+
