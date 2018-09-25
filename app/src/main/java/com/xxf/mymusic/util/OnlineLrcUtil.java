@@ -43,6 +43,7 @@ public class OnlineLrcUtil {
     public static String lrcRootPath;//缓存地址
 
     public static final String queryLrcURLRoot = "http://geci.me/api/lyric/";
+    private ArrayList<LyricContent> LyricList;
 
     public static OnlineLrcUtil getInstance(Context context) {
         if (null == instance) {
@@ -54,50 +55,54 @@ public class OnlineLrcUtil {
     }
 
 
-    public List<LyricContent> getLyricContent(String title, String artist) throws IOException {
-        File ffile = new File(lrcRootPath);
-        if (!ffile.exists()) {
-            ffile.mkdirs();
-        }
-        Log.e(TAG, "getLyricContent: " + ffile.exists());
-        String p = lrcRootPath + title + " - " + artist + ".lrc";
-        File file = new File(p);
-        if (!file.exists()) {//不存在
-            getFileFromServer(queryLrcURLRoot + title + "/" + artist, p);
-        }
-        return Read(p);
-    }
-
     /**
-     * 解析lrc文件
+     * 读取歌词
      *
      * @param path
-     * @throws FileNotFoundException
-     * @throws IOException
+     * @return
      */
-    public ArrayList<LyricContent> Read(String path) throws FileNotFoundException, IOException {
-        String Lrc_data = "";
-        File mFile = new File(path);// /mnt/sdcard/我不知道爱是什么.lrc
-        FileInputStream mFileInputStream = new FileInputStream(mFile);
-        InputStreamReader mInputStreamReader = new InputStreamReader(mFileInputStream, "GB2312");
-        BufferedReader mBufferedReader = new BufferedReader(mInputStreamReader);
-        ArrayList<LyricContent> LyricList = new ArrayList<LyricContent>();
-        while ((Lrc_data = mBufferedReader.readLine()) != null) {//[ti:我不知道爱是什么] ar:艾怡良]
-            Lrc_data = Lrc_data.replace("[", "");// ti:我不知道爱是什么]
-            Lrc_data = Lrc_data.replace("]", "@");// ti:我不知道爱是什么@
-            String splitLrc_data[] = Lrc_data.split("@");// [00:00.00, 我爱歌词网 www.5ilrc.com]split是去掉@并在此处用逗号分隔成两个字符串。最后放到一个数组里。
-            if (splitLrc_data.length > 1) {
-                LyricContent mLyricContent = new LyricContent();
-                mLyricContent.setLyric(splitLrc_data[1]);// [00:00.00, 我爱歌词网 www.5ilrc.com],取数组里面的第2个数据作为歌词。
-                int LyricTime = TimeStr(splitLrc_data[0]);// 取数组里面的第1个数据，放到TimeStr里都转成秒为单位后出来作为歌词时间。0 400 9490 12490 15860 15860 35560
-                mLyricContent.setLyricTime(LyricTime);
-                LyricList.add(mLyricContent);
+    public List<LyricContent> readLRC(String path) {
+        //定义一个StringBuilder对象，用来存放歌词内容
+        StringBuilder stringBuilder = new StringBuilder();
+        File f = new File(path.replace(".mp3", ".lrc"));//path.replace(".mp3", ".lrc")
+        LyricList = new ArrayList<>();
+        try {
+            //创建一个文件输入流对象
+            FileInputStream fis = new FileInputStream(f);
+            InputStreamReader isr = new InputStreamReader(fis, "utf-8");
+            BufferedReader br = new BufferedReader(isr);
+            String s = "";
+
+            while ((s = br.readLine()) != null) {
+                //替换字符
+                s = s.replace("[", "");
+                s = s.replace("]", "@");
+
+                //分离“@”字符
+                String splitLrcData[] = s.split("@");
+                if (splitLrcData.length > 1) {
+
+                    LyricContent mLyricContent = new LyricContent();
+                    mLyricContent.setLyric(splitLrcData[1]);// [00:00.00, 我爱歌词网 www.5ilrc.com],取数组里面的第2个数据作为歌词。
+                    int LyricTime = TimeStr(splitLrcData[0]);// 取数组里面的第1个数据，放到TimeStr里都转成秒为单位后出来作为歌词时间。0 400 9490 12490 15860 15860 35560
+                    mLyricContent.setLyricTime(LyricTime);
+                    LyricList.add(mLyricContent);
+                }
             }
+            stringBuilder.append("有歌词哦！");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            stringBuilder.append("木有歌词文件，赶紧去下载！...");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            stringBuilder.append("木有读取到歌词哦！");
+
         }
-        mBufferedReader.close();
-        mInputStreamReader.close();
+
         return LyricList;
     }
+
 
     public int TimeStr(String timeStr) {// 00:40.57
         timeStr = timeStr.replace(":", ".");//00.40.57
@@ -110,18 +115,32 @@ public class OnlineLrcUtil {
         return currentTime;
     }
 
-    public static boolean getFileFromServer(String uri, String p) throws IOException {
+    /**
+     * 缓存到本地
+     *
+     * @param
+     * @param
+     * @return
+     * @throws IOException
+     */
+    public boolean getFileFromServer(final String name, final String duration) throws IOException {
         //如果相等的话表示当前的sdcard挂载在手机上并且是可用的
         //  if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-        Log.e(TAG, "getFileFromServer: url==" + uri);
-        Log.e(TAG, "getFileFromServer: path==" + p);
+        String path = lrcRootPath + URLEncoder.encode(name, "utf-8");
+        Log.e(TAG, "getFileFromServer: path==" + lrcRootPath + URLEncoder.encode(name, "utf-8") + ".lrc");
+        String urlStr = "http://lyrics.kugou.com/search?ver=1&man=yes&client=pc&keyword=" +
+                URLEncoder.encode(name, "utf-8") + "&duration=" +
+                URLEncoder.encode(duration, "utf-8") + "&hash=";
+
+        Log.e(TAG, "getFileFromServer: " + urlStr);
         URL url = null;
         try {
-            url = new URL(uri);
+            url = new URL(urlStr);
         } catch (MalformedURLException e) {
             e.printStackTrace();
             //  L.d(" url = new URL(uri)出现异常");
             Log.e(TAG, "getFileFromServer:  url = new URL(uri)出现异常");
+            Log.e(TAG, "getFileFromServer: " + e.toString());
         }
         HttpURLConnection conn = null;
         try {
@@ -141,7 +160,7 @@ public class OnlineLrcUtil {
             Log.e(TAG, "getFileFromServer:  is = conn.getInputStream()出现异常");
         }
         long time = System.currentTimeMillis();//当前时间的毫秒数
-        File file = new File(p);
+        File file = new File(path.replace(".mp3", ".lrc"));
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(file);
@@ -166,4 +185,61 @@ public class OnlineLrcUtil {
         //   return false;
         // }
     }
+//    public void searchLyric(final String name, final String duration){
+//
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    //建立连接 -- 查找歌曲
+//                    String urlStr = "http://lyrics.kugou.com/search?ver=1&man=yes&client=pc&keyword=" + name + "&duration=" + duration + "&hash=";
+//                    URL url = new URL(URLEncoder.encode(urlStr,"utf-8"));  //字符串进行URL编码
+//                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//                    conn.connect();
+//
+//                    //读取流 -- JSON歌曲列表
+//                    InputStream input = conn.getInputStream();
+//                    String res = FileUtil.formatStreamToString(input);  //流转字符串
+//
+//                    JSONObject json1 = new JSONObject(res);  //字符串读取为JSON
+//                    JSONArray json2 = json1.getJSONArray("candidates");
+//                    JSONObject json3 = json2.getJSONObject(0);
+//
+//                    //建立连接 -- 查找歌词
+//                    urlStr = "http://lyrics.kugou.com/download?ver=1&client=pc&id=" + json3.get("id") + "&accesskey=" + json3.get("accesskey") + "&fmt=lrc&charset=utf8";
+//                    url = new URL(encodeUrl(urlStr));
+//                    conn = (HttpURLConnection) url.openConnection();
+//                    conn.connect();
+//
+//                    //读取流 -- 歌词
+//                    input = conn.getInputStream();
+//                    res = FileUtil.formatStreamToString(input);
+//                    JSONObject json4 = new JSONObject(res);
+//
+//                    //获取歌词base64，并进行解码
+//                    String base64 = json4.getString("content");
+//                    final String lyric = Base64.getFromBASE64(base64);
+//
+//                    Log.i("lyric", lyric);
+//
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            showLyric.setText(lyric);
+//                        }
+//                    });
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+//    }
+
+   /* urlStr = "http://lyrics.kugou.com/download?ver=1&client=pc&id=" +
+            json3.get("id") +
+            "&accesskey=" +
+            json3.get("accesskey") +
+            "&fmt=lrc&charset=utf8";*/
+
 }

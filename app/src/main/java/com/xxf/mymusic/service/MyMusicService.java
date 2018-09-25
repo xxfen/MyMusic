@@ -446,7 +446,7 @@ public class MyMusicService extends Service {
                     Log.e(TAG, "run: 1111");
                     // if (!isPause) {
                     //递归调用本runable对象，实现每隔一秒一次执行任务
-                    mhandle.postDelayed(this, 1000);
+                    mhandle.postDelayed(this, 100);
                     //  }
                     // } else {
 

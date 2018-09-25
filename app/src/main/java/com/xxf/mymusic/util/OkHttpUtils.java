@@ -76,9 +76,10 @@ public class OkHttpUtils {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 String message = response.body().string();
-
                 try {
-                    JSONObject jsonObject = new JSONObject(message);
+                    onOkHttpListener.onSuccess(message);
+                    /*JSONObject jsonObject = new JSONObject(message);
+                    String status = jsonObject.getString("status");
                     String code = jsonObject.getString("code");
                     String count = jsonObject.getString("count");
 
@@ -86,10 +87,11 @@ public class OkHttpUtils {
                         if (count.equals("0")) {
                             onOkHttpListener.onEmpty();
                         } else {
-                            onOkHttpListener.onSuccess(jsonObject.getString("result"));
+                             onOkHttpListener.onSuccess(jsonObject.getString("result"));
+
                         }
 
-                    }
+                    }*/
                 } catch (Exception e) {
                     onOkHttpListener.onFailure(e.getMessage());
                 }

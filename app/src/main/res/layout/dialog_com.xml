@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/line_dialog_listcontent"
     android:layout_width="match_parent"
@@ -49,7 +49,7 @@
         android:gravity="center"
         android:text="取消"
         android:textColor="@color/color_text3" />
-</com.zhy.autolayout.AutoLinearLayout>
+</LinearLayout>
 
     <!--<com.zhy.autolayout.AutoLinearLayout
         android:id="@+id/line_dialog_acontent"
